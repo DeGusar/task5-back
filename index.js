@@ -9,7 +9,7 @@ const WebSocket = require("ws");
   () => console.log("Server started on 5000")
 ); */
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const INDEX = "/index.html";
 
 const server = express()
