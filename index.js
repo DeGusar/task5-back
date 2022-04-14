@@ -15,7 +15,12 @@ wss.on("connection", function connection(ws) {
     message = JSON.parse(message);
     switch (message.event) {
       case "message":
-        broadCastMessage(message);
+        console.log(message);
+        wss.clients.forEach((client) => {
+          client.id === message.recipient &&
+            client.send(JSON.stringify(message));
+        });
+        /* broadCastMessage(message); */
         break;
       case "connection":
         ws.id = message.userName;
