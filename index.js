@@ -2,12 +2,23 @@ const express = require("express");
 const cors = require("cors");
 const ws = require("ws");
 const WebSocket = require("ws");
-const wss = new ws.Server(
+/* const wss = new ws.Server(
   {
     port: process.env.PORT || 5000,
   },
   () => console.log("Server started on 5000")
-);
+); */
+
+const PORT = process.env.PORT || 5000;
+const INDEX = "/index.html";
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+const { Server } = require("ws");
+
+const wss = new Server({ server });
+
 let onlinePeople = [];
 let wsarray = [];
 wss.on("connection", function connection(ws) {
@@ -57,14 +68,3 @@ function broadCastMessage(message) {
     client.send(JSON.stringify(message));
   });
 }
-
-/* app.use(cors());
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("Task 4");
-});
-
-app.use("/auth", authRoutes);
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); */
