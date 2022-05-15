@@ -15,6 +15,9 @@ const { connect } = require("getstream");
 const wss = new Server({ server });
 
 wss.on("connection", function connection(ws) {
+  const id = setInterval(function () {
+    ws.send(JSON.stringify(new Date()), function () {});
+  }, 10000);
   ws.on("message", function (message) {
     message = JSON.parse(message);
     switch (message.event) {
@@ -27,5 +30,9 @@ wss.on("connection", function connection(ws) {
         ws.id = message.idItem;
         break;
     }
+  });
+  ws.on("close", function () {
+    console.log("websocket connection close");
+    clearInterval(id);
   });
 });
