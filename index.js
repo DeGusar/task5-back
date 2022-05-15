@@ -10,6 +10,7 @@ const server = express()
   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 const { Server } = require("ws");
+const { connect } = require("getstream");
 
 const wss = new Server({ server });
 
@@ -19,12 +20,11 @@ wss.on("connection", function connection(ws) {
     switch (message.event) {
       case "message":
         wss.clients.forEach((client) => {
-          client.id === message.recipient &&
-            client.send(JSON.stringify(message));
+          client.send(JSON.stringify(message));
         });
         break;
       case "connection":
-        ws.id = message.userId;
+        ws.id = message.idItem;
         break;
     }
   });
